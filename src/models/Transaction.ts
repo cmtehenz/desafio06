@@ -4,7 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+
+import Category from './Category';
 
 @Entity('transactions')
 class Transaction {
@@ -14,16 +18,18 @@ class Transaction {
   @Column()
   title: string;
 
-  @Column()
+  @Column('enum')
   type: 'income' | 'outcome';
 
-  @Column('decimal', { precision: 8, scale: 2 })
+  @Column('float')
   value: number;
 
-  @Column('time with time zone')
-  date: Date;
-
+  @Column('uuid')
   category_id: string;
+
+  @ManyToOne(() => Category)
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 
   @CreateDateColumn()
   created_at: Date;
